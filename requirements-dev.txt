@@ -1,0 +1,13 @@
+# Development Dependencies
+# Includes all production dependencies plus development tools
+
+-r requirements.txt
+
+# Testing
+pytest==7.4.3
+pytest-cov==4.1.0
+
+# Linting and code formatting
+flake8==7.3.0
+pylint==4.0.4
+autopep8==2.3.2

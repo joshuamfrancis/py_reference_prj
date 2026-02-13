@@ -31,16 +31,16 @@ def get_user(user_id):
 def create_user():
     """Create a new user"""
     data = request.get_json()
-    
+
     if not data:
         return jsonify({"error": "No data provided"}), 400
-    
+
     name = data.get('name')
     email = data.get('email')
-    
+
     if not name or not email:
         return jsonify({"error": "Missing required fields: name, email"}), 400
-    
+
     user = user_store.create_user(name, email)
     return jsonify(user.to_dict()), 201
 
@@ -51,14 +51,14 @@ def update_user(user_id):
     user = user_store.get_user(user_id)
     if not user:
         return jsonify({"error": "User not found"}), 404
-    
+
     data = request.get_json()
     if not data:
         return jsonify({"error": "No data provided"}), 400
-    
+
     name = data.get('name')
     email = data.get('email')
-    
+
     updated_user = user_store.update_user(user_id, name, email)
     return jsonify(updated_user.to_dict()), 200
 

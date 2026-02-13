@@ -9,9 +9,9 @@ from app.models import user_store
 def app():
     """Create and configure test app"""
     app = create_app(TestingConfig)
-    
+
     yield app
-    
+
     # Cleanup
     user_store.clear_all()
 
