@@ -114,6 +114,40 @@ curl -X PUT http://localhost:5000/api/users/1 \
 curl -X DELETE http://localhost:5000/api/users/1
 ```
 
+## Docker
+
+Build the Docker image locally (single-arch):
+```bash
+docker build -t <your-docker-username>/py_reference_prj:latest .
+```
+
+Run the container locally:
+```bash
+docker run -p 5000:5000 <your-docker-username>/py_reference_prj:latest
+```
+
+Build and push a multi-architecture image with Buildx to Docker Hub:
+```bash
+# create and use a buildx builder (one-time)
+docker buildx create --use --name multi-builder
+
+docker buildx build --platform linux/amd64,linux/arm64 \
+  -t <your-docker-username>/py_reference_prj:latest \
+  -t <your-docker-username>/py_reference_prj:$(git rev-parse --short HEAD) \
+  --push .
+```
+
+Scan the built image with Trivy (local example):
+```bash
+# install trivy: https://aquasecurity.github.io/trivy/v0.40.0/installation/
+trivy image --severity CRITICAL,HIGH <your-docker-username>/py_reference_prj:latest
+```
+
+Notes for CI (GitHub Actions):
+- The provided CI workflow will build the image, run a Trivy scan, and push to Docker Hub only if the scan passes.
+- Add the following repository secrets in GitHub settings: `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`.
+- The workflow tags images as `<DOCKERHUB_USERNAME>/py_reference_prj:latest` and `<DOCKERHUB_USERNAME>/py_reference_prj:<sha>`.
+
 ## Running Tests
 
 Run all tests:
